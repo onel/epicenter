@@ -20,22 +20,22 @@ type ReqInit = Omit<RequestInit, 'body' | 'headers'> & {
 
 /**
  * Creates an HTTP client with configurable options and interceptors
- * @param config - Configuration options for the client
- * @returns A client object with HTTP methods and utilities
+ * @param config - Optional configuration object to customize client behavior
+ * @returns A client object with HTTP methods and configuration utilities
  */
 export const createClient = (config: Config = {}): Client => {
 	let _config = mergeConfigs(createConfig(), config);
 
 	/**
-	 * Returns a copy of the current configuration
-	 * @returns Current client configuration
+	 * Returns a copy of the current client configuration
+	 * @returns Current configuration object
 	 */
 	const getConfig = (): Config => ({ ..._config });
 
 	/**
 	 * Updates the client configuration by merging with existing config
-	 * @param config - New configuration to merge
-	 * @returns Updated configuration
+	 * @param config - Configuration object to merge with current settings
+	 * @returns Updated configuration object
 	 */
 	const setConfig = (config: Config): Config => {
 		_config = mergeConfigs(_config, config);
@@ -50,8 +50,8 @@ export const createClient = (config: Config = {}): Client => {
 	>();
 
 	/**
-	 * Makes an HTTP request with the configured options and interceptors
-	 * @param options - Request options including method, headers, body, etc.
+	 * Executes an HTTP request with the configured options and interceptors
+	 * @param options - Request options including URL, method, headers, and body
 	 * @returns Promise resolving to response data or error information
 	 */
 	const request: Client['request'] = async (options) => {
@@ -202,51 +202,51 @@ export const createClient = (config: Config = {}): Client => {
 	return {
 		buildUrl,
 		/**
-		 * Makes a CONNECT request
+		 * Executes a CONNECT request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
 		connect: (options) => request({ ...options, method: 'CONNECT' }),
 		/**
-		 * Makes a DELETE request
+		 * Executes a DELETE request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
 		delete: (options) => request({ ...options, method: 'DELETE' }),
 		/**
-		 * Makes a GET request
+		 * Executes a GET request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
 		get: (options) => request({ ...options, method: 'GET' }),
 		getConfig,
 		/**
-		 * Makes a HEAD request
+		 * Executes a HEAD request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
 		head: (options) => request({ ...options, method: 'HEAD' }),
 		interceptors,
 		/**
-		 * Makes an OPTIONS request
+		 * Executes an OPTIONS request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
 		options: (options) => request({ ...options, method: 'OPTIONS' }),
 		/**
-		 * Makes a PATCH request
+		 * Executes a PATCH request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
 		patch: (options) => request({ ...options, method: 'PATCH' }),
 		/**
-		 * Makes a POST request
+		 * Executes a POST request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
 		post: (options) => request({ ...options, method: 'POST' }),
 		/**
-		 * Makes a PUT request
+		 * Executes a PUT request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */
@@ -254,7 +254,7 @@ export const createClient = (config: Config = {}): Client => {
 		request,
 		setConfig,
 		/**
-		 * Makes a TRACE request
+		 * Executes a TRACE request
 		 * @param options - Request options
 		 * @returns Promise resolving to response data
 		 */

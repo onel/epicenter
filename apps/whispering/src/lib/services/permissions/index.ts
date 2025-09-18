@@ -3,26 +3,67 @@ import { createTaggedError, extractErrorMessage } from 'wellcrafted/error';
 import type { Result } from 'wellcrafted/result';
 import { Ok, tryAsync } from 'wellcrafted/result';
 
+/**
+ * Tagged error creator and error constructor for permissions service operations
+ */
 export const { PermissionsServiceError, PermissionsServiceErr } =
 	createTaggedError('PermissionsServiceError');
+
+/**
+ * Type representing a permissions service error
+ */
 export type PermissionsServiceError = ReturnType<
 	typeof PermissionsServiceError
 >;
 
+/**
+ * Service interface for managing system permissions on macOS
+ */
 export type PermissionsService = {
+	/**
+	 * Accessibility permission operations
+	 */
 	accessibility: {
+		/**
+		 * Checks current accessibility permission status
+		 * @returns Promise resolving to Result with boolean indicating permission status
+		 */
 		check: () => Promise<Result<boolean, PermissionsServiceError>>;
+		/**
+		 * Requests accessibility permission from the user
+		 * @returns Promise resolving to Result with unknown response from system
+		 */
 		request: () => Promise<Result<unknown, PermissionsServiceError>>;
 	};
+	/**
+	 * Microphone permission operations
+	 */
 	microphone: {
+		/**
+		 * Checks current microphone permission status
+		 * @returns Promise resolving to Result with boolean indicating permission status
+		 */
 		check: () => Promise<Result<boolean, PermissionsServiceError>>;
+		/**
+		 * Requests microphone permission from the user
+		 * @returns Promise resolving to Result with unknown response from system
+		 */
 		request: () => Promise<Result<unknown, PermissionsServiceError>>;
 	};
 };
 
+/**
+ * Creates a new permissions service instance with accessibility and microphone permission management
+ * @returns PermissionsService instance with check and request methods for each permission type
+ */
 function createPermissionsService(): PermissionsService {
 	return {
 		accessibility: {
+			/**
+			 * Checks if accessibility permissions are granted
+			 * Returns true immediately on non-macOS platforms
+			 * @returns Promise resolving to Result with permission status or error
+			 */
 			async check() {
 				if (!IS_MACOS) return Ok(true);
 
@@ -41,6 +82,11 @@ function createPermissionsService(): PermissionsService {
 				});
 			},
 
+			/**
+			 * Requests accessibility permissions from the user
+			 * Returns true immediately on non-macOS platforms
+			 * @returns Promise resolving to Result with request response or error
+			 */
 			async request() {
 				if (!IS_MACOS) return Ok(true);
 
@@ -61,6 +107,11 @@ function createPermissionsService(): PermissionsService {
 		},
 
 		microphone: {
+			/**
+			 * Checks if microphone permissions are granted
+			 * Returns true immediately on non-macOS platforms
+			 * @returns Promise resolving to Result with permission status or error
+			 */
 			async check() {
 				if (!IS_MACOS) return Ok(true);
 
@@ -79,6 +130,11 @@ function createPermissionsService(): PermissionsService {
 				});
 			},
 
+			/**
+			 * Requests microphone permissions from the user
+			 * Returns true immediately on non-macOS platforms
+			 * @returns Promise resolving to Result with request response or error
+			 */
 			async request() {
 				if (!IS_MACOS) return Ok(true);
 
@@ -100,4 +156,7 @@ function createPermissionsService(): PermissionsService {
 	};
 }
 
+/**
+ * Live instance of the permissions service ready for use
+ */
 export const PermissionsServiceLive = createPermissionsService();
