@@ -23,11 +23,11 @@ import {
  */
 export function createNotificationServiceDesktop(): NotificationService {
 	/**
-	 * Removes a notification by its numeric ID from the active notifications list.
-	 * Retrieves all active notifications, finds the matching one, and removes it if found.
+	 * Removes an active notification by its numeric ID.
+	 * Retrieves all active notifications and removes the one matching the provided ID.
 	 * 
 	 * @param {number} id - The numeric ID of the notification to remove
-	 * @returns {Promise<Result<void, NotificationServiceError>>} Success result or error details
+	 * @returns {Promise<Result<void, NotificationServiceError>>} Success result or error if removal fails
 	 */
 	const removeNotificationById = async (
 		id: number,
@@ -64,11 +64,11 @@ export function createNotificationServiceDesktop(): NotificationService {
 	return {
 		/**
 		 * Displays a desktop notification with the provided options.
-		 * Generates a unique ID if none provided, requests permissions if needed,
-		 * removes any existing notification with the same ID, then sends the new notification.
+		 * Handles permission requests, removes existing notifications with the same ID,
+		 * and sends the new notification if permissions are granted.
 		 * 
-		 * @param {UnifiedNotificationOptions} options - Notification configuration including title, description, and optional ID
-		 * @returns {Promise<Result<string, NotificationServiceError>>} The notification ID string or error details
+		 * @param {UnifiedNotificationOptions} options - The notification configuration including title, description, and optional ID
+		 * @returns {Promise<Result<string, NotificationServiceError>>} The notification ID string on success, or error if sending fails
 		 */
 		async notify(options: UnifiedNotificationOptions) {
 			const idStringified = options.id ?? nanoid();
@@ -106,11 +106,11 @@ export function createNotificationServiceDesktop(): NotificationService {
 			return Ok(idStringified);
 		},
 		/**
-		 * Clears a notification by its string ID.
+		 * Clears an active notification by its string ID.
 		 * Converts the string ID to a numeric hash and removes the corresponding notification.
 		 * 
 		 * @param {string} idStringified - The string ID of the notification to clear
-		 * @returns {Promise<Result<void, NotificationServiceError>>} Success result or error details
+		 * @returns {Promise<Result<void, NotificationServiceError>>} Success result or error if clearing fails
 		 */
 		clear: async (idStringified) => {
 			const removeNotificationResult = await removeNotificationById(
